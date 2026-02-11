@@ -6,6 +6,7 @@
 	import 'reveal.js/dist/theme/black.css';
 	import Scene from '$lib/components/Scene.svelte';
 	import MeteorBall from '$lib/components/MeteorBall.svelte';
+	import SceneTitle from '$lib/components/SceneTitle.svelte';
 	import { generateAllPaths } from '$lib/utils/pathGenerator';
 	import {
 		BALL_COUNT,
@@ -23,6 +24,7 @@
 	let spawnDelays = $state<number[]>([]);
 	let spinSpeeds = $state<number[]>([]);
 	let deck: Reveal.Api;
+	let titleDelay = $state(0);
 
 	onMount(() => {
 		// Generate all paths
@@ -79,6 +81,11 @@
 			const delayToNext = APPEARANCE_DURATION - overlap;
 			cumulativeDelay += delayToNext;
 		}
+
+		// Calculate when title should appear (after last ball finishes)
+		const lastBallSpawnTime = spawnDelays[BALL_COUNT - 1];
+		const lastBallFinishTime = lastBallSpawnTime + APPEARANCE_DURATION + TRAVEL_DURATION;
+		titleDelay = lastBallFinishTime + 0.5; // Add 0.5s pause before title
 	}
 
 	function restartAnimation() {
@@ -127,6 +134,8 @@
 										spinSpeed={spinSpeeds[i] || 3}
 									/>
 								{/each}
+								<!-- Title appears after all balls finish -->
+								<SceneTitle delay={titleDelay} />
 							{/key}
 						{/if}
 					</Scene>
