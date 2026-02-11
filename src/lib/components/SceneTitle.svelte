@@ -11,6 +11,8 @@
 	let positionZ = $state(-100);
 	let scale = $state(0.1);
 	let opacity = $state(0);
+	let sparkleScale = $state(0);
+	let sparkleOpacity = $state(0);
 
 	onMount(() => {
 		// Animate title coming from distance
@@ -30,6 +32,39 @@
 					positionZ = target.z;
 					scale = target.s;
 					opacity = target.o;
+				}
+			}
+		);
+
+		// Sparkle effect after title settles (classic toothpaste "ding!")
+		timeline.to(
+			{ sparkleS: 0, sparkleO: 0 },
+			{
+				sparkleS: 1,
+				sparkleO: 1,
+				duration: 0.15,
+				ease: 'power2.out',
+				onUpdate: function () {
+					const target = this.targets()[0];
+					sparkleScale = target.sparkleS;
+					sparkleOpacity = target.sparkleO;
+				}
+			},
+			'+=0.3' // 0.3s after title arrives
+		);
+
+		// Sparkle fade out
+		timeline.to(
+			{ sparkleS: 1, sparkleO: 1 },
+			{
+				sparkleS: 0.5,
+				sparkleO: 0,
+				duration: 0.4,
+				ease: 'power2.in',
+				onUpdate: function () {
+					const target = this.targets()[0];
+					sparkleScale = target.sparkleS;
+					sparkleOpacity = target.sparkleO;
 				}
 			}
 		);
@@ -132,5 +167,41 @@
 			<T.BoxGeometry args={[0.01, 2.5, 0.01]} />
 			<T.MeshBasicMaterial color="#ffffff" transparent={true} opacity={opacity * 0.6} />
 		</T.Mesh>
+	{/if}
+
+	<!-- Toothpaste-style sparkle at top right -->
+	{#if sparkleOpacity > 0}
+		<T.Group position={[5, 1.5, 0.4]} scale={sparkleScale}>
+			<!-- Center bright point -->
+			<T.Mesh>
+				<T.SphereGeometry args={[0.15, 16, 16]} />
+				<T.MeshBasicMaterial color="#ffffff" transparent={true} opacity={sparkleOpacity} />
+			</T.Mesh>
+
+			<!-- 4-point star rays -->
+			<!-- Horizontal ray -->
+			<T.Mesh rotation={[0, 0, 0]}>
+				<T.BoxGeometry args={[1.2, 0.04, 0.02]} />
+				<T.MeshBasicMaterial color="#ffffff" transparent={true} opacity={sparkleOpacity} />
+			</T.Mesh>
+			<!-- Vertical ray -->
+			<T.Mesh rotation={[0, 0, 0]}>
+				<T.BoxGeometry args={[0.04, 1.2, 0.02]} />
+				<T.MeshBasicMaterial color="#ffffff" transparent={true} opacity={sparkleOpacity} />
+			</T.Mesh>
+			<!-- Diagonal ray 1 -->
+			<T.Mesh rotation={[0, 0, Math.PI / 4]}>
+				<T.BoxGeometry args={[1.0, 0.03, 0.02]} />
+				<T.MeshBasicMaterial color="#ffffff" transparent={true} opacity={sparkleOpacity * 0.8} />
+			</T.Mesh>
+			<!-- Diagonal ray 2 -->
+			<T.Mesh rotation={[0, 0, -Math.PI / 4]}>
+				<T.BoxGeometry args={[1.0, 0.03, 0.02]} />
+				<T.MeshBasicMaterial color="#ffffff" transparent={true} opacity={sparkleOpacity * 0.8} />
+			</T.Mesh>
+
+			<!-- Point light for extra glow -->
+			<T.PointLight intensity={8 * sparkleOpacity} color="#ffffff" distance={4} />
+		</T.Group>
 	{/if}
 </T.Group>
