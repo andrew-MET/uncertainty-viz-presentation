@@ -52,16 +52,16 @@
 		deck.initialize();
 
 		// Auto-start animation when first slide is shown
-		deck.on('slidechanged', (event: any) => {
-			if (event.indexh === 0 && !animationStarted) {
-				startAnimation();
-			}
-		});
+		// deck.on('slidechanged', (event: any) => {
+		// 	if (event.indexh === 0 && !animationStarted) {
+		// 		startAnimation();
+		// 	}
+		// });
 
-		// Start animation on first slide load
-		if (!animationStarted) {
-			startAnimation();
-		}
+		// // Start animation on first slide load
+		// if (!animationStarted) {
+		// 	startAnimation();
+		// }
 	});
 
 	function generateSpinSpeeds() {
@@ -117,7 +117,7 @@
 				class="restart-button"
 				onclick={animationStarted ? restartAnimation : startAnimation}
 			>
-				{animationStarted ? 'Restart Animation' : 'Start Animation'}
+				{animationStarted ? 'Restart' : 'Start'}
 			</button>
 
 			{#if browser && paths.length > 0}
@@ -145,25 +145,46 @@
 
 		<!-- Slide 2: Title -->
 		<section>
-			<h1>Temperature</h1>
-			<p>A Visual Exploration</p>
+			<h1>DEODE</h1>
+			<p>NWP ensemble (7 members)</p>
+			<p>PP ensemble (12 quantiles)</p>
+			<p>DD ensemble (30? members)</p>
 		</section>
 
 		<!-- Slide 3: Content -->
 		<section>
-			<h2>What is Temperature?</h2>
-			<p>Temperature is a measure of the average kinetic energy of particles in a substance.</p>
+			<h2>What we're supposed to provide</h2>
+			<p>A front end user interface</p>
+			<p>Timeseries with uncertainty information at points</p>
+			<p>Interactive elements - thresholds, full distribution, probabilities etc.</p>
+			<p>Observations where available</p>
 		</section>
 
 		<!-- Slide 4: More Content -->
 		<section>
-			<h2>Measuring Temperature</h2>
-			<ul>
-				<li>Celsius (°C)</li>
-				<li>Fahrenheit (°F)</li>
-				<li>Kelvin (K)</li>
-			</ul>
+			<h2>What we can visualize...</h2>
+			<p>Maps!</p>
+			<p>Individual members</p>
+			<p>Probabilities for user supplied thresholds</p>
+			<p>Neighbourhood probabilities for any neighbourhood size</p>
 		</section>
+
+		<!-- Slide 5: More Content -->
+		<section>
+			<h2>But how?</h2>
+			<p>NetCDF files optimized for fast reading</p>
+			<p>FastAPI backend with msgpack packing and compression</p>
+			<p>SVGs (with the help of D3) for timeseries</p>
+			<p>WebGL shaders for rasters</p>
+		</section>
+
+		<!-- Slide 6: More Content -->
+		<section>
+			<h2>WiP</h2>
+			<p><a href="https://visualization.ecmwf-destine-deode.f.ewcloud.host/uncertainty-viz/">See here!</a></p>
+		</section>
+
+
 	</div>
 </div>
 
@@ -177,6 +198,7 @@
 	.reveal {
 		width: 100vw;
 		height: 100vh;
+		background: #222;
 	}
 
 	.full-slide {
@@ -230,5 +252,9 @@
 
 	:global(.reveal h1, .reveal h2, .reveal h3, .reveal p, .reveal ul) {
 		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+	}
+
+	:global(.reveal h1, .reveal h2) {
+		padding-top: 50px;
 	}
 </style>

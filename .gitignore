@@ -36,7 +36,6 @@ pip-delete-this-directory.txt
 htmlcov/
 *.egg-info/
 dist/
-build/
 
 # node
 node_modules/
