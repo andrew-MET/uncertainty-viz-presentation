@@ -105,10 +105,6 @@
 	}
 </script>
 
-<svelte:head>
-	<title>Temperature Presentation</title>
-</svelte:head>
-
 <div class="reveal">
 	<div class="slides">
 		<!-- Slide 1: 3D Animation -->
